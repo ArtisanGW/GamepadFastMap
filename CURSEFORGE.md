@@ -31,4 +31,4 @@ It's a simple tool with no dependencies:
 - [Gamepad Reticle Customizer](https://www.curseforge.com/projects/1818557): turns the reticle into an icon on your target: a player's class or faction, an NPC's job.
 - [Gamepad Reticle On Target](https://www.curseforge.com/projects/1819101): puts the controller's reticle on your target's nameplate.
 
-The code is free to copy, as long as you credit it.
+The code is **NOT FREE** to copy: reach out to me if you want to use it.

@@ -1,9 +1,9 @@
 -- Development builds only (left out of the release, see .pkgmeta).
--- /gfm debug   says whether the fix runs, whether the quest log listens to quest
+-- /gpfm debug   says whether the fix runs, whether the quest log listens to quest
 --              pin leaves right now, and whether its highlight is still the game's
 --              own (not tainted by addon code): hover a quest pin with the
 --              controller, move off it, then run it.
--- /gfm debug watch   90 seconds: hover quest pins and close the map, also both
+-- /gpfm debug watch   90 seconds: hover quest pins and close the map, also both
 --              at once. Logs each quest pin enter and leave (and an enter that
 --              comes while a leave is still being sent), and each change of the
 --              quest log's place in the game's event registry: listening or not,

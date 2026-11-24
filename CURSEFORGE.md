@@ -24,7 +24,7 @@ The longest frame each time the map opened or closed, with 20 quests on the map:
 
 It's a simple tool with no dependencies:
 - On as soon as it's installed
-- Turn it off in Options > AddOns > Gamepad Fast Map, or /gfm
+- Turn it off in Options > AddOns > Gamepad Fast Map, or /gpfm
 
 ## Goes well with
 - [Gamepad Camera Offset](https://www.curseforge.com/projects/1818297): moves the camera over your shoulder.

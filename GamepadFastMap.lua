@@ -1,8 +1,8 @@
 -- GamepadFastMap: on the controller UI, the world map opens and closes without
--- its hitch. Settings sit in the game's Options > AddOns > Gamepad Fast Map, or /gfm.
+-- its hitch. Settings sit in the game's Options > AddOns > Gamepad Fast Map, or /gpfm.
 --
 -- Files, one job each:
---   GamepadFastMap.lua   saved settings, the settings page, events, /gfm
+--   GamepadFastMap.lua   saved settings, the settings page, events, /gpfm
 --   QuestPinLeave.lua    the fix: the quest log rebuilt once, not once per quest pin
 --   Popup.lua            a popup in the game's style
 --   RelatedAddons.lua    hints for our other controller addons
@@ -77,8 +77,8 @@ eventFrame:SetScript("OnEvent", function(_, event, name)
     end
 end)
 
--- /gfm (or /gamepadfastmap) opens the settings.
-SLASH_GAMEPADFASTMAP1 = "/gfm"
+-- /gpfm (or /gamepadfastmap) opens the settings.
+SLASH_GAMEPADFASTMAP1 = "/gpfm"
 SLASH_GAMEPADFASTMAP2 = "/gamepadfastmap"
 SlashCmdList.GAMEPADFASTMAP = function(message)
     local command, arguments = tostring(message or ""):lower():match("^%s*(%S*)%s*(.-)%s*$")

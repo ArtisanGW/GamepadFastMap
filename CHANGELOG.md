@@ -5,4 +5,4 @@
 First release.
 
 - On the controller UI, the world map opens and closes without its hitch
-- Settings in Options > AddOns > Gamepad Fast Map, or /gfm
+- Settings in Options > AddOns > Gamepad Fast Map, or /gpfm

@@ -1,6 +1,6 @@
 ## Interface: 16001
 ## Title: Gamepad Fast Map
-## Notes: Opens and closes the world map without its hitch on the controller UI. Settings in Options > AddOns > Gamepad Fast Map, or /gfm.
+## Notes: Opens and closes the world map without its hitch on the controller UI. Settings in Options > AddOns > Gamepad Fast Map, or /gpfm.
 ## Author: Artisan
 ## Version: @project-version@
 ## SavedVariables: GamepadFastMapDB

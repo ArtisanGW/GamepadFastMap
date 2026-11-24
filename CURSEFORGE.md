@@ -1,3 +1,5 @@
+**Summary:** Opens and closes the world map without its hitch on the controller UI. Install it and the map is smooth again.
+
 ## Description
 
 With the controller UI on, the world map hitches each time it opens or closes: a tenth to a third of a second, more with a long quest log.

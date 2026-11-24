@@ -6,3 +6,4 @@ First release.
 
 - On the controller UI, the world map opens and closes without its hitch
 - Settings in Options > AddOns > Gamepad Fast Map, or /gfm
+- Its icon: a folded map flying open, with a quest pin

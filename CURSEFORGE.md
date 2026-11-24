@@ -1,4 +1,5 @@
 **Summary:** Opens and closes the world map without its hitch on the controller UI. Install it and the map is smooth again.
+**Categories:** Map & Minimap, Quests & Leveling
 
 ## Description
 

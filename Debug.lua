@@ -10,6 +10,8 @@
 --              and whether that place is still the game's own or tainted (a
 --              tainted one makes the quest log's rebuild run as addon code).
 --              Saved in GamepadFastMapDB.debugWatch on the reload at the end.
+-- /gpfm debug pins   the map close test run by tests/ingame_pin_close.sh
+--              (DebugPinClose.lua).
 local FastMap = _G.GamepadFastMap
 
 local Debug = {}
@@ -118,6 +120,7 @@ end
 
 function Debug.Command(arguments)
     if arguments == "watch" then return Watch.Start() end
+    if arguments == "pins" then return Debug.PinClose.Start() end   -- DebugPinClose.lua
     local questLog = _G.QuestScrollFrame
     report("fix running: " .. tostring(FastMap.QuestPinLeave.IsRunning()))
     report("quest log listening to leaves: " .. tostring(questLogListening()))

@@ -68,7 +68,7 @@ end
 
 local function finishWatch()
     watchFrame:SetScript("OnUpdate", nil)
-    _G.EventRegistry:UnregisterCallback(FastMap.QuestPinLeave.ENTER, Watch)
+    _G.EventRegistry:UnregisterCallback("MapCanvas.QuestPin.OnEnter", Watch)
     _G.EventRegistry:UnregisterCallback(FastMap.QuestPinLeave.LEAVE, Watch)
     watch.timerText:Hide()
     local summary = string.format("%d enters during a leave. Slot tainted %d times, ends %s. Highlight tainted %d times.",
@@ -89,7 +89,7 @@ function Watch.Start()
     watch = { date = date("%Y-%m-%d %H:%M:%S"), startedAt = GetTime(), lines = {}, entersDuringLeave = 0,
         taintedTimes = 0, highlightTaintedTimes = 0, lastHighlight = highlightState(), lastSlot = questLogSlot(), timerText = timerText }
     note("start, slot " .. watch.lastSlot .. ", highlight " .. watch.lastHighlight)
-    _G.EventRegistry:RegisterCallback(FastMap.QuestPinLeave.ENTER, function() onPinEvent("enter") end, Watch)
+    _G.EventRegistry:RegisterCallback("MapCanvas.QuestPin.OnEnter", function() onPinEvent("enter") end, Watch)
     _G.EventRegistry:RegisterCallback(FastMap.QuestPinLeave.LEAVE, function() onPinEvent("leave") end, Watch)
     watchFrame:SetScript("OnUpdate", function()
         if watch.checkHighlightNextFrame then

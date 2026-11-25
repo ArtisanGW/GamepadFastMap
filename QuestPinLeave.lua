@@ -7,28 +7,33 @@
 -- (QuestDataProvider.lua:290), and the quest log answers each one by rebuilding
 -- itself in full (QuestMapFrame.lua:1267-1270, QuestLogQuests_Update). With 20 quest
 -- pins that's 20 rebuilds in one frame: 100 to 300 ms each time the map opens or
--- closes. The rebuild only clears the quest log's highlight of the quest under the
--- cursor (calloutQuestID, QuestMapFrame.lua:1954), so it's only needed after the
--- cursor was on a quest pin.
+-- closes. The rebuild only clears the quest log's highlight of the quest whose pin
+-- the cursor was on (calloutQuestID, QuestMapFrame.lua:1954).
 --
--- The fix: the quest log listens to that message only while the cursor is on a
--- quest pin. Its own function stays the one that runs, from the game's own event
--- registry: this file only says when it's listening.
---   Cursor enters a quest pin ("MapCanvas.QuestPin.OnEnter"): listening again.
---   A leave once the highlight is cleared: not listening any more, so the next
---   released pins rebuild nothing.
--- Turned off (Stop), the quest log listens all the time again, as the game set it.
+-- The fix:
+--   1. The quest log stops listening to that message, once. Nothing is ever
+--      written back into the game's event registry: a callback registered from
+--      addon code runs as addon code, and the quest log's rebuild then taints what
+--      it writes. Inside the map's close (B on the controller) that got the game's
+--      SetPreferredGamepadInteractTarget() blocked (seen 2026-11-24, taintLog 4).
+--   2. What the rebuild did is done by hiding a texture: once the cursor is off
+--      the quest's pin, the quest log's highlight of it is hidden. The game's own
+--      "cursor on a quest pin" is POIButtonHighlightManager (set before a pin's
+--      enter message, cleared before its leave: QuestDataProvider.lua:279-289).
+--      Checked at each leave, and after each rebuild the game does for its own
+--      reasons (a post-hook: hooksecurefunc, which leaves the game's code secure).
+-- Turned off (Stop): the quest log listens again only after a reload, as the game
+-- set it at load. Putting it back from addon code is what tainted.
 local FastMap = _G.GamepadFastMap
 
 local QuestPinLeave = {
-    ENTER = "MapCanvas.QuestPin.OnEnter",
     LEAVE = "MapCanvas.QuestPin.OnLeave",
 }
 FastMap.QuestPinLeave = QuestPinLeave
 
 local running = false
-local questLog         -- the game's quest list (QuestScrollFrame)
-local questLogLeave    -- its answer to a leave, as the game registered it
+local stoppedListening = false   -- the quest log was unhooked this session
+local hookedRebuild = false
 
 local function registry()
     local eventRegistry = _G.EventRegistry
@@ -38,52 +43,52 @@ local function registry()
     end
 end
 
-local function listen(eventRegistry)
-    eventRegistry:RegisterCallback(QuestPinLeave.LEAVE, questLogLeave, questLog)
+-- The quest the cursor is on (a map pin or the quest log's own icon), or nil.
+local function hoveredQuestID()
+    local manager = _G.POIButtonHighlightManager
+    if type(manager) == "table" and type(manager.GetQuestID) == "function" then return manager:GetQuestID() end
 end
 
-local function stopListening(eventRegistry)
-    eventRegistry:UnregisterCallback(QuestPinLeave.LEAVE, questLog)
-end
-
--- The cursor is on a quest pin: its leave must clear the highlight.
-local function onEnter()
-    local eventRegistry = registry()
-    if running and eventRegistry then listen(eventRegistry) end
-end
-
--- A leave. The quest log may hear it before or after us: while its highlight is
--- still set, it hasn't yet, so it keeps listening for this one.
-local function onLeave()
-    local eventRegistry = registry()
-    if running and eventRegistry and questLog.calloutQuestID == nil then stopListening(eventRegistry) end
+-- The quest log still highlights a quest the cursor left: hide that highlight.
+function QuestPinLeave.HideStaleHighlight()
+    if not running then return end
+    local questLog = _G.QuestScrollFrame
+    local highlightedQuestID = questLog and questLog.calloutQuestID
+    if highlightedQuestID == nil or highlightedQuestID == hoveredQuestID() then return end
+    local titleButtons = questLog.titleFramePool
+    if type(titleButtons) ~= "table" or type(titleButtons.EnumerateActive) ~= "function" then return end
+    for button in titleButtons:EnumerateActive() do
+        if button.questID == highlightedQuestID and button.HighlightTexture then button.HighlightTexture:Hide() end
+    end
 end
 
 function QuestPinLeave.Start()
     if running then return true end
     local eventRegistry = registry()
-    local scrollFrame = _G.QuestScrollFrame
-    if not (eventRegistry and type(scrollFrame) == "table") then return false end
-    if scrollFrame.IsForbidden and scrollFrame:IsForbidden() then return false end
-    local leave = scrollFrame.OnMapCanvasPinLeave
-    if type(leave) ~= "function" then return false end
-    questLog, questLogLeave = scrollFrame, leave
+    local questLog = _G.QuestScrollFrame
+    if not (eventRegistry and type(questLog) == "table") then return false end
+    if questLog.IsForbidden and questLog:IsForbidden() then return false end
     running = true
-    eventRegistry:RegisterCallback(QuestPinLeave.ENTER, onEnter, QuestPinLeave)
-    eventRegistry:RegisterCallback(QuestPinLeave.LEAVE, onLeave, QuestPinLeave)
-    -- The cursor may be on a pin right now: then its leave is still needed.
-    if questLog.calloutQuestID == nil then stopListening(eventRegistry) end
+    if not stoppedListening then
+        eventRegistry:UnregisterCallback(QuestPinLeave.LEAVE, questLog)
+        stoppedListening = true
+    end
+    eventRegistry:RegisterCallback(QuestPinLeave.LEAVE, QuestPinLeave.HideStaleHighlight, QuestPinLeave)
+    if not hookedRebuild and type(_G.QuestLogQuests_Update) == "function" then
+        hooksecurefunc("QuestLogQuests_Update", QuestPinLeave.HideStaleHighlight)
+        hookedRebuild = true
+    end
     return true
 end
 
+-- Stops hiding highlights. The quest log listens again after the next reload.
 function QuestPinLeave.Stop()
     if not running then return end
     running = false
     local eventRegistry = registry()
-    if not eventRegistry then return end
-    eventRegistry:UnregisterCallback(QuestPinLeave.ENTER, QuestPinLeave)
-    eventRegistry:UnregisterCallback(QuestPinLeave.LEAVE, QuestPinLeave)
-    listen(eventRegistry)
+    if eventRegistry then eventRegistry:UnregisterCallback(QuestPinLeave.LEAVE, QuestPinLeave) end
 end
 
 function QuestPinLeave.IsRunning() return running end
+-- True when the game's own leave handling only comes back with a reload.
+function QuestPinLeave.NeedsReload() return stoppedListening and not running end

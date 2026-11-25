@@ -9,7 +9,7 @@ The cause is in the game: as it lets go of the map's quest pins, it rebuilds the
 
 [![Support me on Ko-fi](https://images.weserv.nl/?url=storage.ko-fi.com/cdn/kofi5.png&h=36)](https://ko-fi.com/artisangw)
 
-This addon has the quest list rebuild only when it's needed, when the cursor leaves a quest pin. The map looks and works exactly the same, just without the hitch.
+This addon stops those rebuilds. The only thing they did was clear the quest list's highlight when the cursor leaves a quest pin, and the addon still clears it. The map looks and works exactly the same, just without the hitch.
 
 ## Measured
 

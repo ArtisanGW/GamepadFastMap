@@ -27,10 +27,15 @@ function FastMap.GetSettings()
     return settings
 end
 
--- Starts or stops the fix, as the settings say.
+-- Starts or stops the fix, as the settings say. Turned off after it ran, the
+-- game's own handling comes back with a reload (QuestPinLeave.lua): offered here.
 function FastMap.Apply()
-    if FastMap.GetSettings().enabled then FastMap.QuestPinLeave.Start()
-    else FastMap.QuestPinLeave.Stop() end
+    if FastMap.GetSettings().enabled then return FastMap.QuestPinLeave.Start() end
+    FastMap.QuestPinLeave.Stop()
+    if FastMap.QuestPinLeave.NeedsReload() and FastMap.Popup then
+        FastMap.Popup.Show({ text = "Fast map is off.\n\nReload to give the map back its own quest list updates.",
+            buttons = { { text = RELOADUI or "Reload", reload = true }, { text = LATER or "Later" } } })
+    end
 end
 
 -- Settings: Options > AddOns > Gamepad Fast Map
@@ -48,7 +53,8 @@ function FastMap.RegisterSettings()
     Settings.CreateCheckbox(category, setting,
         "Opens and closes the world map without its hitch on the controller UI.\n\n"
         .. "The game rebuilds the whole quest list once per quest pin each time the map opens or closes. "
-        .. "With this on, it rebuilds it only when the cursor leaves a quest pin. The map looks and works the same.")
+        .. "With this on, it doesn't, and the quest list's highlight still goes when the cursor leaves a quest pin. "
+        .. "The map looks and works the same.")
 
     if FastMap.AddRelatedAddonButtons then FastMap.AddRelatedAddonButtons(layout) end   -- RelatedAddons.lua
     Settings.RegisterAddOnCategory(category)

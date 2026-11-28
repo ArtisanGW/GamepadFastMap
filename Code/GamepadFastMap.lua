@@ -6,6 +6,8 @@
 --   QuestPinLeave.lua    the fix: the quest log rebuilt once, not once per quest pin
 --   Popup.lua            a popup in the game's style
 --   RelatedAddons.lua    hints for our other controller addons
+--   Debug.lua            development builds only: /gpfm debug
+--   DebugPinClose.lua    development builds only: /gpfm debug pins
 local ADDON_NAME = ...
 
 local FastMap = {

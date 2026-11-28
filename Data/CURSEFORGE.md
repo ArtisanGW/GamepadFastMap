@@ -17,7 +17,7 @@ With the controller UI on, the world map hitches each time it opens or closes: a
 
 The cause is in the game: as it lets go of the map's quest pins, it rebuilds the whole quest list once for each pin. With 20 quests on the map, that's 20 rebuilds in one frame.
 
-[![Support me on Ko-fi](https://images.weserv.nl/?url=storage.ko-fi.com/cdn/kofi5.png&h=36)](https://ko-fi.com/artisangw)
+[![Support me on Ko-fi](https://raw.githubusercontent.com/ArtisanGW/assets/main/kofi-button.png)](https://ko-fi.com/artisangw)
 
 This addon stops those rebuilds. The only thing they did was clear the quest list's highlight when the cursor leaves a quest pin, and the addon still clears it. The map looks and works exactly the same, just without the hitch.
 

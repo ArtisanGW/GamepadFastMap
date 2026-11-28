@@ -5,14 +5,14 @@
 ## Version: @project-version@
 ## SavedVariables: GamepadFastMapDB
 ## Category: Gamepad
-## IconTexture: Interface\AddOns\GamepadFastMap\Media\icon-64.png
+## IconTexture: Interface\AddOns\GamepadFastMap\Code\Media\icon-64.png
 
-GamepadFastMap.lua
-QuestPinLeave.lua
-Popup.lua
-RelatedAddons.lua
+Code\GamepadFastMap.lua
+Code\QuestPinLeave.lua
+Code\Popup.lua
+Code\RelatedAddons.lua
 #@do-not-package@
 # Development builds only: left out of the release (.pkgmeta)
-Debug.lua
-DebugPinClose.lua
+Code\Debug.lua
+Code\DebugPinClose.lua
 #@end-do-not-package@

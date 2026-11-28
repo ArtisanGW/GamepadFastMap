@@ -107,7 +107,7 @@ local function boot(options)
     }
     _G.C_AddOns = { DoesAddOnExist = function() return true end }
 
-    for _, file in ipairs({ "GamepadFastMap.lua", "QuestPinLeave.lua", "Popup.lua", "RelatedAddons.lua" }) do
+    for _, file in ipairs({ "Code/GamepadFastMap.lua", "Code/QuestPinLeave.lua", "Code/Popup.lua", "Code/RelatedAddons.lua" }) do
         assert(loadfile(file))("GamepadFastMap")
     end
     _G.GamepadFastMap.Popup = { Show = function(popup) game.popups[#game.popups + 1] = popup end }

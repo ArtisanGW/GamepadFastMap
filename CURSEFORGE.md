@@ -9,7 +9,7 @@ Opens and closes the world map without its hitch on the controller UI. Install i
 
 # License
 
-All Rights Reserved
+GNU General Public License version 3 (GPLv3)
 
 # Description
 
@@ -40,5 +40,3 @@ It's a simple tool with no dependencies:
 - [Gamepad Camera Offset](https://www.curseforge.com/projects/1818297): moves the camera over your shoulder.
 - [Gamepad Reticle Customizer](https://www.curseforge.com/projects/1818557): turns the reticle into an icon on your target: a player's class or faction, an NPC's job.
 - [Gamepad Reticle On Target](https://www.curseforge.com/projects/1819101): puts the controller's reticle on your target's nameplate.
-
-The code is **NOT FREE** to copy: reach out to me if you want to use it.

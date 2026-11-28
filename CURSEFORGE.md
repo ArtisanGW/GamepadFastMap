@@ -1,6 +1,6 @@
 # Summary
 
-Opens and closes the world map without its hitch on the controller UI. Install it and the map is smooth again.
+The world map, smooth again on a controller. No more hitch when it opens or closes: install it and explore.
 
 # Categories
 
